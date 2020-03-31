@@ -1,0 +1,172 @@
+<!-- 
+	Author: Katya Thorup
+	Assignment: Comp20 Homework #9
+	Purpose: practice using JSON data structure by displaying at least 10
+	         songs from at least 3 different genres
+
+	Last modified: 3/30/2020
+--> 
+
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Song Listings</title>
+
+<style type="text/css">
+	body {
+		box-sizing: border-box;
+		padding: 0 10px 10px 10px;
+	}
+
+	h1 {
+		text-align: center;
+	}
+
+	b {
+		font-size: 20px;
+	}
+
+	#top {display: flex;
+		flex-direction: row;
+		justify-content: center;
+	}
+
+	#songs {
+		box-sizing: border-box;
+		display: inline-block;
+		flex: 75%;
+		text-align: center;
+		margin-right: 20px;
+		padding: 10px;
+	}
+
+	.song {
+		box-sizing: border-box;
+		margin: 20px 0;
+		padding: 15px 2px;
+		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+		font-size: 17px;
+	}
+
+	.song:first-child {
+		margin-top: 5px;
+	}
+
+	.song:last-child {
+		margin-bottom: 5px;
+	}
+
+	#selector {
+		box-sizing: border-box;
+		display: inline-block;
+		flex: 25%;
+		text-align: center;
+		padding: 10px;
+		position: sticky;
+		top: 0;
+		height: 100px;
+		font-size: 20px;
+		color: navy;
+		background-color: #B9D3EE;
+		vertical-align: middle;
+		margin-top: 20px;
+		border: 1px solid lightgrey;
+    	border-radius: 3px;
+	}
+
+	#myselect {
+		box-sizing: border-box;
+		font-size: 20px;
+		padding: 10px;
+	}
+
+	button {
+		box-sizing: border-box;
+		font-size: 20px;
+		padding: 10px;
+	}
+</style>
+</head>
+
+<body>
+
+	<h1> Cover Band Song List </h1>
+
+	<div id="top">
+		<script src="songs_java.js"></script>
+		<script language="javascript">
+			function write_all(array) {
+				var str = "";
+				for (var i = 0; i < array.length; i++) {
+					str += "<div class='song'>";
+					var json_str = JSON.stringify(array[i]);
+					str += json_str + "<br/><br/>";
+					var json_obj = JSON.parse(json_str);
+					str += "<b>" + json_obj.title + "</b><br/>";
+					str += "Artist(s): " + json_obj.artists + "<br/>";
+					str += "Genre(s): " + json_obj.genres + "<br/>";
+					str += "Released " + json_obj.year + "<br/>";
+					str = (str).replace(/,/g, ", ");
+					str += "</div>";
+				}
+				document.getElementById("songs").innerHTML = str;
+			}
+
+			function change_myselect() {
+				var genre = document.getElementById("myselect").value;
+				if (genre == "all") {
+					write_all(songs);
+				}
+				else {
+					write_genre(songs, genre);
+				}
+			}
+
+			function write_genre(array, sel) {
+				var str = "";
+				for (var i = 0; i < array.length; i++) {
+					for(var j = 0; j < array[i].genres.length; j++) {
+						if (array[i].genres[j] == sel) {
+							str += "<div class='song'>";
+							var json_str = JSON.stringify(array[i]);
+							str += json_str + "<br/><br/>";
+							var json_obj = JSON.parse(json_str);
+							str += "<b>" + json_obj.title + "</b><br/>";
+							str += "Artist(s): " + json_obj.artists + "<br/>";
+							str += "Genre(s): " + json_obj.genres + "<br/>";
+							str += "Released " + json_obj.year + "<br/>";
+							str = (str).replace(/,/g, ", ");
+							str += "</div>";
+						}
+					}
+				}
+				document.getElementById("songs").innerHTML = str;
+			}
+
+		</script>
+
+		<div id="songs"></div>
+			<script language="javascript">
+				write_all(songs);
+			</script>
+
+		<div id="selector">
+			<form id="form">
+				<select id="myselect">
+  					<option value="all">All genres</option>
+  					<option value="pop">Pop</option>
+  					<option value="country">Country</option>
+  					<option value="R&B">R&B</option>
+  					<option value="soul">Soul</option>
+				</select>
+				<button type="button" onclick="change_myselect()">Filter</button>
+			</form>
+		</div>
+	</div>
+
+</body>
+</html>
